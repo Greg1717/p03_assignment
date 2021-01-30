@@ -1,0 +1,32 @@
+---
+title: "README"
+output: html_document
+---
+
+Code description:
+
+Using data.table package for importing & processing data.
+
+- Download ZIP file into 'data' directory.
+- Unzip ZIP file.
+
+Load & Process **Training** Data
+- Import training set x_train.txt
+- Import features.txt & use features$feature_descr as variable names in x_train
+- Import activity labels and name variables to "activity_code" & "activity_descr"
+- Import subject_train.txt, rename variable to "subject_label"
+- Import y_train.txt, rename variable to "activity_code" & add description from activity_labels
+- Create combined 'train' dataset by combining (cbind) subject_train, y_train & x_train.
+
+Load & Process **Test** Data
+- Import testing set x_test.txt
+- Use features$feature_descr as variable names in x_test
+- Import y_test.txt, rename variable to "activity_code" & add description from activity_labels
+- Import subject_test.txt, rename variable to "subject_label"
+- Create combined 'test' dataset by combining (cbind) subject_test, y_test & x_test.
+
+Merge the training and the test sets to create one data set using **rbind**.
+
+Extract only the measurements on the mean and standard deviation for each measurement using **grep**. 
+
+Create second dataset named dt_averages with average of each variable for each activity and each subject.
