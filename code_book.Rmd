@@ -1,6 +1,6 @@
 ---
 title: "code_book"
-output: html_document
+output: rmarkdown::github_document
 ---
 
 The final dataset contains the averages of following measurements by subject and activity:

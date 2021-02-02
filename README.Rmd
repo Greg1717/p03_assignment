@@ -1,6 +1,6 @@
 ---
 title: "README"
-output: html_document
+output: rmarkdown::github_document
 ---
 
 Code description:
