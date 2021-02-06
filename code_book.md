@@ -1,0 +1,147 @@
+code\_book
+================
+
+# Code Book
+
+This document represents the code book for the TidyData set created as a
+result of the run\_analysis\_R script.
+
+# Data Source
+
+The source data for the project is the **Human Activity Recognition
+Using Smartphones** Data Set which was built from the recordings of 30
+subjects performing activities of daily living (ADL) while carrying a
+waist-mounted smartphone with embedded inertial sensors. Each person
+(subject) performed six activities (WALKING, WALKING\_UPSTAIRS,
+WALKING\_DOWNSTAIRS, SITTING, STANDING, LAYING)) wearing a smartphone
+(Samsung Galaxy S II) on the waist. Using its embedded accelerometer and
+gyroscope, 3-axial linear acceleration and 3-axial angular velocity
+measurements at a constant rate of 50Hz were captured.
+
+The features selected for this database come from the accelerometer and
+gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain
+signals (prefix ‘t’ to denote time) were captured at a constant rate of
+50 Hz. Then they were filtered using a median filter and a 3rd order low
+pass Butterworth filter with a corner frequency of 20 Hz to remove
+noise. Similarly, the acceleration signal was then separated into body
+and gravity acceleration signals (tBodyAcc-XYZ and tGravityAcc-XYZ)
+using another low pass Butterworth filter with a corner frequency of 0.3
+Hz.
+
+Subsequently, the body linear acceleration and angular velocity were
+derived in time to obtain Jerk signals (tBodyAccJerk-XYZ and
+tBodyGyroJerk-XYZ). Also the magnitude of these three-dimensional
+signals were calculated using the Euclidean norm (tBodyAccMag,
+tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag).
+Finally a Fast Fourier Transform (FFT) was applied to some of these
+signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ,
+fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the ‘f’ to
+indicate frequency domain signals).
+
+# Data Transformations
+
+Based on the individual datasets a singular tidy dataset has been
+created (for more details see README.Rmd)
+
+From the tidy dataset the code extracts only the measurements on the
+**mean** and **standard deviation** for each measurement using **grep**,
+but also use the first three columns which contain subject label,
+activity code & activity description
+
+`my_vars_mean_std <- c(1, 2, 3, grep(pattern = "mean|std", x =
+names(dt_tidy_dataset)))`
+
+The variables determined above are extracted to a separate data.table:
+
+`dt_tidy_mean_std <- dt_tidy_dataset[, ..my_vars_mean_std]`
+
+Create second dataset named dt\_averages with average of each variable
+for each activity and each subject:
+
+`dt_tidy_averages <- dt_tidy_mean_std[, lapply(.SD, mean),` `keyby =
+.(subject_label, activity_code, activity_descr)]`
+
+# Variables
+
+The final dataset contains the averages of following measurements by
+subject and activity:
+
+**subject\_label** - (integer) ID of subject performing the activity.
+Ranges from 1 to 30.
+
+**activity\_code** - (integer) ID of activity. Ranges from 1 to 6.
+
+**activity\_descr** - Activity the subject is performing. 6 possible
+values: WALKING, WALKING\_UPSTAIRS, WALKING\_DOWNSTAIRS, SITTING,
+STANDING, LAYING.
+
+These variables are all of the **mean values** for the corresponding
+measurement based on the subject and the activity. These are all of data
+type **numeric**.
+
+tBodyAccmeanX  
+tBodyAccmeanY  
+tBodyAccmeanZ  
+tBodyAccstdX  
+tBodyAccstdY  
+tBodyAccstdZ  
+tGravityAccmeanX  
+tGravityAccmeanY  
+tGravityAccmeanZ  
+tGravityAccstdX  
+tGravityAccstdY  
+tGravityAccstdZ  
+tBodyAccJerkmeanX  
+tBodyAccJerkmeanY  
+tBodyAccJerkmeanZ  
+tBodyAccJerkstdX  
+tBodyAccJerkstdY  
+tBodyAccJerkstdZ  
+tBodyGyromeanX  
+tBodyGyromeanY  
+tBodyGyromeanZ  
+tBodyGyrostdX  
+tBodyGyrostdY  
+tBodyGyrostdZ  
+tBodyGyroJerkmeanX  
+tBodyGyroJerkmeanY  
+tBodyGyroJerkmeanZ  
+tBodyGyroJerkstdX  
+tBodyGyroJerkstdY  
+tBodyGyroJerkstdZ  
+tBodyAccMagmean  
+tBodyAccMagstd  
+tGravityAccMagmean  
+tGravityAccMagstd  
+tBodyAccJerkMagmean  
+tBodyAccJerkMagstd  
+tBodyGyroMagmean  
+tBodyGyroMagstd  
+tBodyGyroJerkMagmean  
+tBodyGyroJerkMagstd  
+fBodyAccmeanX  
+fBodyAccmeanY  
+fBodyAccmeanZ  
+fBodyAccstdX  
+fBodyAccstdY  
+fBodyAccstdZ  
+fBodyAccJerkmeanX  
+fBodyAccJerkmeanY  
+fBodyAccJerkmeanZ  
+fBodyAccJerkstdX  
+fBodyAccJerkstdY  
+fBodyAccJerkstdZ  
+fBodyGyromeanX  
+fBodyGyromeanY  
+fBodyGyromeanZ  
+fBodyGyrostdX  
+fBodyGyrostdY  
+fBodyGyrostdZ  
+fBodyAccMagmean  
+fBodyAccMagstd  
+fBodyBodyAccJerkMagmean  
+fBodyBodyAccJerkMagstd  
+fBodyBodyGyroMagmean  
+fBodyBodyGyroMagstd  
+fBodyBodyGyroJerkMagmean  
+fBodyBodyGyroJerkMagstd

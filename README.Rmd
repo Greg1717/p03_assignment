@@ -27,6 +27,19 @@ Load & Process **Test** Data
 
 Merge the training and the test sets to create one data set using **rbind**.
 
-Extract only the measurements on the mean and standard deviation for each measurement using **grep**. 
 
-Create second dataset named dt_averages with average of each variable for each activity and each subject.
+Extract only the measurements on the mean and standard deviation for each measurement using **grep**: 
+Use GREP to extract 'mean' & 'std' from variable names, i.e. identify index of required variable names, but also use the first three columns which contain subject label, activity code & activity description
+
+`my_vars_mean_std <- c(1, 2, 3, grep(pattern = "mean|std", x = names(dt_tidy_dataset)))`
+
+
+Extract only Subject Label, Activity Code, Activity Description & 'mean' and 'std' variables
+
+`dt_tidy_mean_std <- dt_tidy_dataset[, ..my_vars_mean_std]`
+
+
+Create second dataset named dt_averages with average of each variable for each activity and each subject:
+
+`dt_tidy_averages <- dt_tidy_mean_std[, lapply(.SD, mean),`
+                        `keyby = .(subject_label, activity_code, activity_descr)]`

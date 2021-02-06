@@ -30,16 +30,19 @@ names(features) <- c("feature_id", "feature_descr")
 # Use features$feature_descr as variable names in x_train
 names(x_train) <- features$feature_descr
 
+# import activity labels
 activity_labels <- data.table::fread(
     file = "./data/UCI HAR Dataset/activity_labels.txt")
 
 names(activity_labels) <- c("activity_code", "activity_descr")
 
+# import subject data
 subject_train <- data.table::fread(
     file = "./data/UCI HAR Dataset/train/subject_train.txt")
 
 names(subject_train) <- "subject_label"
 
+# import y_train
 y_train <- data.table::fread(
     file = "./data/UCI HAR Dataset/train/y_train.txt")
 
@@ -83,6 +86,7 @@ y_test$activity_descr <-
 
 remove(activity_labels)
 
+# import subject data
 subject_test <- data.table::fread(
     file = "./data/UCI HAR Dataset/test/subject_test.txt")
 
@@ -97,18 +101,24 @@ test <- cbind(subject_test,
 remove(subject_test); remove(y_test); remove(x_test)
 
 
-
 # MERGE ========================================================================
-dt <- rbind(test, train); remove(test); remove(train)
+dt_tidy_dataset <- rbind(test, train); remove(test); remove(train)
 
 
 # Extract Mean & SD ============================================================
-my_vars <- c(1, 2, 3, grep(pattern = "mean|std", x = names(dt)))
-dt <- dt[, ..my_vars]
+# use GREP to extract 'mean' & 'std' from variable names, i.e. identify index of required variable names, but also use the first three columns which contain subject label, activity code & activity description
+my_vars_mean_std <- c(1, 2, 3, grep(pattern = "mean|std", x = names(dt_tidy_dataset)))
+
+# extract only Subject Label, Activity Code, Activity Description & 'mean' and 'std' variables
+dt_tidy_mean_std <- dt_tidy_dataset[, ..my_vars_mean_std]
 
 
 # Averages =====================================================================
-dt_averages <- dt[, lapply(.SD, mean),
-                  keyby = .(subject_label, activity_code, activity_descr)]
+# calculate the mean on the extracted variables
+dt_tidy_averages <- dt_tidy_mean_std[, lapply(.SD, mean),
+                                     keyby = .(subject_label, activity_code, activity_descr)]
 
-dt_averages
+# export
+write.table(x = dt_tidy_averages,
+            file = "dt_tidy_averages.txt",
+            row.names = FALSE)
